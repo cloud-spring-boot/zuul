@@ -10,7 +10,7 @@ public class FilterUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(FilterUtils.class);
 
-    static final String CORRELATION_ID_HEADER = "Correlation-Id";
+    static final String CORRELATION_ID_HEADER = "correlation-id";
 
     static final String PRE_FILTER_TYPE = "pre";
     static final String POST_FILTER_TYPE = "post";
@@ -22,12 +22,14 @@ public class FilterUtils {
         if (ctx.getRequest().getHeader(CORRELATION_ID_HEADER) != null) {
             return ctx.getRequest().getHeader(CORRELATION_ID_HEADER);
         }
-
-        return ctx.getZuulRequestHeaders().get(CORRELATION_ID_HEADER);
+        else {
+            return ctx.getZuulRequestHeaders().get(CORRELATION_ID_HEADER);
+        }
     }
 
     void setCorrelationId(String id) {
-        RequestContext.getCurrentContext().addZuulRequestHeader(CORRELATION_ID_HEADER, id);
+        RequestContext ctx = RequestContext.getCurrentContext();
+        ctx.addZuulRequestHeader(CORRELATION_ID_HEADER, id);
     }
 
 }

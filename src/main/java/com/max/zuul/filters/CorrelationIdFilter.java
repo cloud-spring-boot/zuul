@@ -41,15 +41,12 @@ public class CorrelationIdFilter extends ZuulFilter {
 
     @Override
     public Object run() {
-
         if (isCorrelationIdPresent()) {
             LOG.info("Correlation-Id found {}", filterUtils.getCorrelationId());
         }
         else {
-
-            final String correlationIdValue = UUID.randomUUID().toString();
-            filterUtils.setCorrelationId(correlationIdValue);
-            LOG.info("Generated id: {}", correlationIdValue);
+            filterUtils.setCorrelationId(UUID.randomUUID().toString());
+            LOG.info("Generated id: {}", filterUtils.getCorrelationId());
         }
 
         LOG.info("Processing incoming request for {}",
