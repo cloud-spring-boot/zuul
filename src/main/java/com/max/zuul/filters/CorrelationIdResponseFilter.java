@@ -46,9 +46,7 @@ public class CorrelationIdResponseFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         ctx.getResponse().addHeader(FilterUtils.CORRELATION_ID_HEADER, filterUtils.getCorrelationId());
 
-        LOG.info("Request {} with correlation-id {} completed",
-                ctx.getRequest().getRequestURI(),
-                filterUtils.getCorrelationId());
+        LOG.info("END correlation-id {} for {}", filterUtils.getCorrelationId(), ctx.getRequest().getRequestURI());
 
         return null;
     }

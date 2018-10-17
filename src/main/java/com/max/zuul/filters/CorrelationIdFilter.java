@@ -42,17 +42,18 @@ public class CorrelationIdFilter extends ZuulFilter {
     @Override
     public Object run() {
         if (isCorrelationIdPresent()) {
-            LOG.info("Correlation-Id found {}", filterUtils.getCorrelationId());
+            LOG.info("PASSING correlation-id {} for {}", filterUtils.getCorrelationId(), getRequestUri());
         }
         else {
             filterUtils.setCorrelationId(UUID.randomUUID().toString());
-            LOG.info("Generated id: {}", filterUtils.getCorrelationId());
+            LOG.info("START correlation-id {} for {}", filterUtils.getCorrelationId(), getRequestUri());
         }
 
-        LOG.info("Processing incoming request for {}",
-                RequestContext.getCurrentContext().getRequest().getRequestURI());
-
         return null;
+    }
+
+    private static String getRequestUri(){
+        return RequestContext.getCurrentContext().getRequest().getRequestURI();
     }
 
     private boolean isCorrelationIdPresent() {
