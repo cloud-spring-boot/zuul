@@ -4,6 +4,7 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -46,7 +47,8 @@ public class CorrelationIdResponseFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         ctx.getResponse().addHeader(FilterUtils.CORRELATION_ID_HEADER, filterUtils.getCorrelationId());
 
-        LOG.info("END correlation-id {} for {}", filterUtils.getCorrelationId(), ctx.getRequest().getRequestURI());
+        LOG.info("END for {}", ctx.getRequest().getRequestURI());
+        MDC.clear();
 
         return null;
     }

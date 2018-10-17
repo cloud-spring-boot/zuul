@@ -1,14 +1,10 @@
 package com.max.zuul.filters;
 
 import com.netflix.zuul.context.RequestContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FilterUtils {
-
-    private static final Logger LOG = LoggerFactory.getLogger(FilterUtils.class);
 
     static final String CORRELATION_ID_HEADER = "correlation-id";
 
