@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 echo "********************************************************"
 echo "Waiting for the Eureka to start on port $EUREKASERVER_PORT"
@@ -15,6 +15,10 @@ echo ">>>>>>>>>>>> Configuration Server has started"
 echo "********************************************************"
 echo "Starting zuul-service "
 echo "********************************************************"
+
+nohup tcpdump -A -s 0 'tcp port 5555 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)' \
+-w /usr/local/zuul/pcap/zuul.pcap &
+
 java \
 -Djava.security.egd=file:/dev/./urandom \
 -Deureka.client.serviceUrl.defaultZone=$EUREKASERVER_URI \
