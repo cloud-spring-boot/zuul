@@ -2,28 +2,23 @@ package com.max.zuul.filters;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.stereotype.Component;
 
-/**
- * Add correlation-id header back to response for a client.
- */
 @Component
-public class CorrelationIdResponseFilter extends ZuulFilter {
+public class CorrelationIdReponseFilter extends ZuulFilter {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CorrelationIdResponseFilter.class);
+    private static final String CORRELATION_ID_HEADER = "tmx-correlation-id";
 
     private static final int FILTER_ORDER = 1;
     private static final boolean SHOULD_FILTER = true;
 
-    private final FilterUtils filterUtils;
+    private final Tracer tracer;
 
     @Autowired
-    public CorrelationIdResponseFilter(FilterUtils filterUtils) {
-        this.filterUtils = filterUtils;
+    public CorrelationIdReponseFilter(Tracer tracer) {
+        this.tracer = tracer;
     }
 
     @Override
@@ -43,13 +38,8 @@ public class CorrelationIdResponseFilter extends ZuulFilter {
 
     @Override
     public Object run() {
-
         RequestContext ctx = RequestContext.getCurrentContext();
-        ctx.getResponse().addHeader(FilterUtils.CORRELATION_ID_HEADER, filterUtils.getCorrelationId());
-
-        LOG.info("END for {}", ctx.getRequest().getRequestURI());
-        MDC.clear();
-
+        ctx.getResponse().addHeader(CORRELATION_ID_HEADER, tracer.getCurrentSpan().traceIdString());
         return null;
     }
 }
