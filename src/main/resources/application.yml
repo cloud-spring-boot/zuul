@@ -1,6 +1,11 @@
 server:
   port: ${PORT:5555}
 
+spring:
+  sleuth.sampler.percentage: 1
+  zipkin:
+    baseUrl: ${ZIPKIN_SERVER_URI:localhost:9411}
+
 eureka:
   instance:
     preferIpAddress: true
